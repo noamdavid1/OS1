@@ -1,10 +1,10 @@
 CC = gcc
 CFLAGS = -Wall 
 
-pitagoras: pitagoras.c
-	$(CC) $(CFLAGS) pitagoras.c -o pitagoras -lm
+pitagoras: pifagor3.c
+	$(CC) $(CFLAGS) pifagor3.c -o pifagor3 -lm
 
 .PHONY: clean
 clean:
-	rm -f pitagoras
+	rm -f pifagor3
 	
