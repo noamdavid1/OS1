@@ -20,5 +20,5 @@ If the received key is invalid, the program will return null, otherwise the prog
 + *int encode(char * textin, char * textout, int len, void * codec):* Encrypts textin into textout using the codec.
 + *int decode(char * textin, char * textout, int len, void * codec):* Decoding textin into textout using the codec.
 In any case of success the function will return the number of decoded or encoded bits.
-+ *Void freecodec(void * codec):* 
++ *Void freecodec(void * codec):* This function frees the memory taken by the codec parameter. 
 
