@@ -25,9 +25,9 @@ If the received key is invalid, the program will return null, otherwise the prog
 In any case of success the function will return the number of decoded or encoded bits.
 + *Void freecodec(void * codec):* This function frees the memory taken by the codec parameter.
 
-You can see the two files in the image before running the code. So the source file contains text and the target file does not contain the encrypted text:
+### You can see the two files in the image before running the code. So the source file contains text and the target file does not contain the encrypted text:
  ![WhatsApp Image 2024-01-24 at 13 57 46](https://github.com/noamdavid1/OS1/assets/93923600/450b1cea-132d-43fe-a0c4-258296aa2d96)
- After running it can be seen that the encrypted code has been written to the target file:
+### After running it can be seen that the encrypted code has been written to the target file:
  ![WhatsApp Image 2024-01-24 at 13 57 46 (1)](https://github.com/noamdavid1/OS1/assets/93923600/42e89fed-f3ad-4bc9-ab60-a085b9353591)
 
 
