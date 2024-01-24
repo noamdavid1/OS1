@@ -2,7 +2,26 @@
 In this assignment we were asked to perform 4 exercises.
 
 ## OS1_1
+In this exercise we were required to work with debug.
+For the ID card that ends with check digits 1-3, we worked on bug "A" - a program that crashes due to division by zero.
+And in case the identity card ends with check digit 4-6, we worked on a "B" bug - a program that crashes due to illegal memory access.
 
+### We were asked to show a compilation of the program with and without debug
+![WhatsApp Image 2024-01-24](https://github.com/noamdavid1/OS1/assets/93923600/9d4af998-3edf-4ce5-9771-c39a46036511)
+
+We ran the program knowing that it would create a core file with and without debug. We were asked to open the core using gdb
+### Running the program without debug
+![WhatsApp Image 2024-01-24 at 13 55 47 (1)](https://github.com/noamdavid1/OS1/assets/93923600/ffec7081-ae8e-45c9-baf1-d3fd79e5ff0a)
+### Running the program with debug
+![WhatsApp Image 2024-01-24 at 13 55 47 (2)](https://github.com/noamdavid1/OS1/assets/93923600/ec3b3b4b-d793-44ed-8efe-d0a0632b2130)
+![WhatsApp Image 2024-01-24 at 13 55 47 (3)](https://github.com/noamdavid1/OS1/assets/93923600/ef3262c9-5469-4932-bdd5-45f13cd4671a)
+
+It can be seen that the difference in output between input with and without debugging is the exact location of the error.
+So in the program with debug we found the relevant line of the fall in the code with the help of core. And in the program without the debug the exact location is not found.
+
+### Finally, we demonstrated opening the core using a graphical debugger - DDD
+![WhatsApp Image 2024-01-24 at 13 55 47 (5)](https://github.com/noamdavid1/OS1/assets/93923600/e65d043c-e922-4c2d-9c57-b36a3aff6ee8)
+![WhatsApp Image 2024-01-24 at 13 55 47 (4)](https://github.com/noamdavid1/OS1/assets/93923600/26c965b3-c740-44df-b194-fba9d5c24b3b)
 
 ## OS1_2
 In this exercise we were asked to work with a library.
