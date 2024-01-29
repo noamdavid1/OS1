@@ -60,6 +60,23 @@ Both commands accept a parameter with the help of argv.
 In the case of myzip it is a directory. The goal is to merge it into a large file (using tar), compress it (for example using compress) and encrypt it using gpg.
 In the case of unzip it is a compressed file. We would like to decode it and deploy it.
 
+We will explain a little about the code:
+Initially you get the name of the folder to compress.
+Then create two pipes for communication between processes - pipefd_tar_gzip - for communication between tar and gzip.
+pipefd_gzip_gpg - for communication between gzip and gpg.
+## Then there are three stages of fork:
++ *First step (tar):* Creates a child process for tar, which executes tar cf - <directory>. The tar output is directed to the pipefd_tar_gzip pipe.
+dup2(pipefd_tar_gzip[1], STDOUT_FILENO): Returns tar's stdout to the created pipe, so that tar's output is piped.
+execlp("tar", "tar", "cf", "-", argv[1], NULL): concatenates the tar command with the arguments "cf" (create file) and "-" (create output supported in stdout ), followed by the path to the folder you want to compress.
++ *Second step (gzip):* creates a child process for gzip, which receives the output from the pipefd_tar_gzip pipe and comes out compressed.
+dup2(pipefd_gzip_gpg[1], STDOUT_FILENO): Returns gzip's stdout to the gpg communication pipe.
+execlp("gzip", "gzip", NULL): call to gzip command.
++ *Third step (gpg):* Creates a child process for gpg, which receives the output from the pipefd_gzip_gpg pipe and encryption is performed.
+dup2(pipefd_gzip_gpg[0], STDIN_FILENO): returns the stdin of gpg to the gzip communication pipe.
+execlp("gpg", "gpg", "-e", "--yes", "--recipient", "yael4231@gmail.com", NULL): call to the gpg command with the appropriate arguments for encryption. --yes confirms all encryption-related questions automatically, and --recipient specifies the recipient of the public number or its email address.
+
+Finally, the program closes the ends of the pipes that are not required in each process, and then waits for the end of each child process using wait.
+
 ### Collaborators
 - *Noam David*
 - *Yael Gabay*
