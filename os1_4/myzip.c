@@ -49,7 +49,6 @@ int main(int argc, char *argv[]) {
         close(pipefd_tar_gzip[0]); // Close unused read end
 
         dup2(pipefd_gzip_gpg[0], STDIN_FILENO); // Redirect stdin to gzip pipe
-        // gpg -e  --yes --batch --recipient yael4231@gmail.com  > yael_but_encrypted.tar.gz.gpg
         execlp("gpg", "gpg", "-e", "--yes", "--recipient", "yael4231@gmail.com", NULL);
         // execlp("gpg", "/usr/bin/gpg", "-e", "--yes", "--batch",  "--recipient", "your_recipient_key_or_email","--passpharse","4231", NULL);
         perror("execlp gpg");
