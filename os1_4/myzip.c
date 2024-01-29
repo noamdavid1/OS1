@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     // Fork for tar
     if (!fork()) {
         close(pipefd_tar_gzip[0]); // Close unused read end
-        dup2(pipefd_tar_gzip[1], STDOUT_FILENO); // Redirect stdout to pipe
+        dup2(pipefd_tar_gzip[1], STDOUT_FILENO); // Redirect stdout to pipe 
         execlp("tar", "tar", "cf", "-", argv[1], NULL);
         perror("execlp tar");
         exit(EXIT_FAILURE);
@@ -33,6 +33,7 @@ int main(int argc, char *argv[]) {
     if (!fork()) {
         close(pipefd_gzip_gpg[0]); // Close unused read end
         dup2(pipefd_tar_gzip[0], STDIN_FILENO); // Redirect stdin to tar pipe
+        close(pipefd_tar_gzip[1]); // Close unused write end
         dup2(pipefd_gzip_gpg[1], STDOUT_FILENO); // Redirect stdout to pipe
         execlp("gzip", "gzip", NULL);
         perror("execlp gzip");
@@ -44,14 +45,19 @@ int main(int argc, char *argv[]) {
 
     // Fork for gpg
     if (!fork()) {
-        close(pipefd_gzip_gpg[0]); // Close unused read end
-        dup2(pipefd_gzip_gpg[1], STDOUT_FILENO); // Redirect stdout to pipe
-        execlp("gpg", "gpg", "--output", "output.gpg", "--encrypt", "--recipient", "yael4231@gmail.com", NULL);
+        close(pipefd_gzip_gpg[1]); // Close unused write end
+        close(pipefd_tar_gzip[0]); // Close unused read end
+
+        dup2(pipefd_gzip_gpg[0], STDIN_FILENO); // Redirect stdin to gzip pipe
+        // gpg -e  --yes --batch --recipient yael4231@gmail.com  > yael_but_encrypted.tar.gz.gpg
+        execlp("gpg", "gpg", "-e", "--yes", "--recipient", "yael4231@gmail.com", NULL);
+        // execlp("gpg", "/usr/bin/gpg", "-e", "--yes", "--batch",  "--recipient", "your_recipient_key_or_email","--passpharse","4231", NULL);
         perror("execlp gpg");
         exit(EXIT_FAILURE);
     }
 
-    close(pipefd_gzip_gpg[0]); // Close write end in the parent
+    close(pipefd_gzip_gpg[0]); // Close read end in the parent
+    close(pipefd_tar_gzip[1]); // Close unused write end
 
     // Wait for all child processes to finish
     for (int i = 0; i < 3; i++) {
