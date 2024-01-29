@@ -60,7 +60,7 @@ Both commands accept a parameter with the help of argv.
 In the case of myzip it is a directory. The goal is to merge it into a large file (using tar), compress it (for example using compress) and encrypt it using gpg.
 In the case of unzip it is a compressed file. We would like to decode it and deploy it.
 
-We will explain a little about the code:
+We will explain a little about the code:                                                                             
 Initially you get the name of the folder to compress.
 Then create two pipes for communication between processes - pipefd_tar_gzip - for communication between tar and gzip.
 pipefd_gzip_gpg - for communication between gzip and gpg.
