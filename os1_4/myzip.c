@@ -50,7 +50,6 @@ int main(int argc, char *argv[]) {
 
         dup2(pipefd_gzip_gpg[0], STDIN_FILENO); // Redirect stdin to gzip pipe
         execlp("gpg", "gpg", "-e", "--yes", "--recipient", "yael4231@gmail.com", NULL);
-        // execlp("gpg", "/usr/bin/gpg", "-e", "--yes", "--batch",  "--recipient", "your_recipient_key_or_email","--passpharse","4231", NULL);
         perror("execlp gpg");
         exit(EXIT_FAILURE);
     }
@@ -63,7 +62,7 @@ int main(int argc, char *argv[]) {
         wait(NULL);
     }
 
-    printf("Compression completed. Terminating.\n");
+    //printf("Compression completed. Terminating.\n");
 
     return 0;
 }
