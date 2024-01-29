@@ -1,22 +1,15 @@
 CC = gcc
-CFLAGS = -Wall 
+CFLAGS = -Wall
+all: polyalphabetic
 
-SRC_FILES = main.c polyalphabetic.c 
-HEADER_FILES = polyalphabetic.h 
-OBJ_FILES = $(SRC_FILES:.c=.o)
+polyalphabetic: main.o polyalphabetic.o
+	$(CC) $(CFLAGS) -o polyalphabetic main.o polyalphabetic.o
 
-TARGET = encriptor
+main.o: main.c polyalphabetic.h
+	$(CC) $(CFLAGS) -c main.c
 
-all: $(TARGET)
-
-%.o: %.c $(HEADER_FILES)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(TARGET): $(OBJ_FILES)
-	$(CC) $(CFLAGS) $(OBJ_FILES) -o $(TARGET)
+polyalphabetic.o: polyalphabetic.c polyalphabetic.h
+	$(CC) $(CFLAGS) -c polyalphabetic.c
 
 clean:
-	rm -f $(OBJ_FILES) $(TARGET)
-
-.PHONY: all clean
-			
+	rm -f polyalphabetic *.o
