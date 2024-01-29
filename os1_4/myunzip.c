@@ -5,60 +5,63 @@
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
-        fprintf(stderr, "Usage: %s <compressed_file.gpg>\n", argv[0]);
+        fprintf(stderr, "Usage: %s <compressed_file>\n", argv[0]);
         exit(EXIT_FAILURE);
     }
 
-    int pipefd_gpg_gunzip[2];
-    int pipefd_gunzip_tar[2];
+    int pipefd_gpg_gzip[2];
+    int pipefd_gzip_tar[2];
 
     // Create pipes
-    if (pipe(pipefd_gpg_gunzip) == -1 || pipe(pipefd_gunzip_tar) == -1) {
+    if (pipe(pipefd_gpg_gzip) == -1 || pipe(pipefd_gzip_tar) == -1) {
         perror("pipe");
         exit(EXIT_FAILURE);
     }
 
     // Fork for gpg
     if (!fork()) {
-        close(pipefd_gpg_gunzip[0]); // Close unused read end
-        dup2(pipefd_gpg_gunzip[1], STDOUT_FILENO); // Redirect stdout to pipe
-        execlp("gpg", "gpg", "--output", "-", "--encrypt", "--recipient", "yael4231@gmail.com", NULL);
+        close(pipefd_gpg_gzip[0]);
+        dup2(pipefd_gpg_gzip[1], STDOUT_FILENO);
+        execlp("gpg", "gpg", "--decrypt", "--yes", "--batch", "--recipient", "yael4231@gmail.com", argv[1], NULL);
         perror("execlp gpg");
         exit(EXIT_FAILURE);
-    }
+    } 
 
-    close(pipefd_gpg_gunzip[1]); // Close write end in the parent
+    close(pipefd_gpg_gzip[1]);
 
     // Fork for gunzip
     if (!fork()) {
-        close(pipefd_gunzip_tar[0]); // Close unused read end
-        dup2(pipefd_gpg_gunzip[0], STDIN_FILENO); // Redirect stdin to gpg pipe
-        dup2(pipefd_gunzip_tar[1], STDOUT_FILENO); // Redirect stdout to pipe
+        close(pipefd_gzip_tar[0]);
+        dup2(pipefd_gpg_gzip[0], STDIN_FILENO);
+        close(pipefd_gpg_gzip[0]);
+        dup2(pipefd_gzip_tar[1], STDOUT_FILENO);
         execlp("gunzip", "gunzip", NULL);
         perror("execlp gunzip");
         exit(EXIT_FAILURE);
-    }
+    } 
 
-    close(pipefd_gpg_gunzip[0]); // Close read end in the parent
-    close(pipefd_gunzip_tar[1]); // Close write end in the parent
+    close(pipefd_gpg_gzip[0]);
+    close(pipefd_gzip_tar[1]);
 
     // Fork for tar
     if (!fork()) {
-        close(pipefd_gunzip_tar[0]); // Close unused read end
-        dup2(pipefd_gunzip_tar[1], STDOUT_FILENO); // Redirect stdout to pipe
+        close(pipefd_gpg_gzip[0]);
+        close(pipefd_gpg_gzip[1]);
+        close(pipefd_gzip_tar[1]);  // Close unused write end
+
+        dup2(pipefd_gzip_tar[0], STDIN_FILENO);  // Redirect stdin to read from the pipe
+        close(pipefd_gzip_tar[0]);  // Close unused read end
         execlp("tar", "tar", "xf", "-", NULL);
         perror("execlp tar");
         exit(EXIT_FAILURE);
     }
 
-    close(pipefd_gunzip_tar[1]); // Close write end in the parent
+    close(pipefd_gzip_tar[0]);  // Close read end in the parent
 
-    // Wait for all child processes to finish
     for (int i = 0; i < 3; i++) {
         wait(NULL);
     }
-
-    printf("Decompression and decryption completed. Terminating.\n");
+ printf("Decompression completed. Terminating.\n");
 
     return 0;
 }
