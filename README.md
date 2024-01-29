@@ -52,10 +52,13 @@ In any case of success the function will return the number of decoded or encoded
 
 
 ## OS1_4
+In this exercise we were required to work with processes.
+We were asked to build a compressor-encryptor like zip with the help of several processes - merge a directory and sub-directories into one big file. Similarly, he knows how to open a large file and merge it into several files
+We are interested in receiving two orders: myzip, myunzip
+Both commands accept a parameter with the help of argv.
 
-
-
-  
+In the case of myzip it is a directory. The goal is to merge it into a large file (using tar), compress it (for example using compress) and encrypt it using gpg.
+In the case of unzip it is a compressed file. We would like to decode it and deploy it.
 
 ### Collaborators
 - *Noam David*
