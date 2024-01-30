@@ -78,6 +78,8 @@ execlp("gpg", "gpg", "-e", "--yes", "--recipient", "yael4231@gmail.com", NULL): 
 
 Finally, the program closes the ends of the pipes that are not required in each process, and then waits for the end of each child process using wait.
 
+## myunzip
+
 ### Collaborators
 - *Noam David*
 - *Yael Gabay*
