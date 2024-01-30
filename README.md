@@ -78,6 +78,8 @@ execlp("gpg", "gpg", "-e", "--yes", "--recipient", "yael4231@gmail.com", NULL): 
 
 Finally, the program closes the ends of the pipes that are not required in each process, and then waits for the end of each child process using wait.
 
+![WhatsApp Image 2024-01-29 at 21 08 08 (1)](https://github.com/noamdavid1/OS1/assets/93923600/9efcec2e-e75b-4b13-91f4-f3d4b90d3708)
+
 ## myunzip
 We will explain a little about the code:
 In this code, a file is decoded and exploded and returned from an encrypted file to the original.
@@ -88,7 +90,9 @@ The program uses three child processes to perform the various steps of the opera
 + *Third step (tar):* Unloading the contents from the file by tar. This process uses the execlp function to replace the current process and run tar. The input of this process is the output of the previous pipe process, and its action is to disassemble the file and return the content to the original file.
 
 Finally, the program closes the ends of the pipes that are not required in each process, and then waits for the end of each child process using wait.
-  
+
+![WhatsApp Image 2024-01-29 at 21 08 08](https://github.com/noamdavid1/OS1/assets/93923600/160246fe-22a6-4351-8d15-38f5de112ce7)
+
 
 ### Collaborators
 - *Noam David*
