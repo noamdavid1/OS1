@@ -91,6 +91,8 @@ The program uses three child processes to perform the various steps of the opera
 
 Finally, the program closes the ends of the pipes that are not required in each process, and then waits for the end of each child process using wait.
 
+![WhatsApp Image 2024-01-29 at 21 08 08 (2)](https://github.com/noamdavid1/OS1/assets/93923600/4c1d6e38-54d9-44fe-8040-b244c87328fc)
+
 ![WhatsApp Image 2024-01-29 at 21 08 08](https://github.com/noamdavid1/OS1/assets/93923600/160246fe-22a6-4351-8d15-38f5de112ce7)
 
 
