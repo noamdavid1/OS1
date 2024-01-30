@@ -79,6 +79,16 @@ execlp("gpg", "gpg", "-e", "--yes", "--recipient", "yael4231@gmail.com", NULL): 
 Finally, the program closes the ends of the pipes that are not required in each process, and then waits for the end of each child process using wait.
 
 ## myunzip
+We will explain a little about the code:
+In this code, a file is decoded and exploded and returned from an encrypted file to the original.
+The program uses three child processes to perform the various steps of the operation. The decompressed file is transferred via pipes between the processes.
+## Then there are three stages of fork:
++ *First step (gpg):* Decoding by GPG. The file is executed by GPG and the program uses the execlp function to replace the current process with a call to GPG and run it so that the input is passed to the next process program directly. At the end of the process, the content will be transferred to the next process using a pipe.
++ *Second step (gunzip):* Blast by gunzip. This process uses the execlp function to replace the current process and run gunzip. The input of this process is the exploded input it received from the previous operation. The result of the explosion is piped to the next process.
++ *Third step (tar):* Unloading the contents from the file by tar. This process uses the execlp function to replace the current process and run tar. The input of this process is the output of the previous pipe process, and its action is to disassemble the file and return the content to the original file.
+
+Finally, the program closes the ends of the pipes that are not required in each process, and then waits for the end of each child process using wait.
+  
 
 ### Collaborators
 - *Noam David*
